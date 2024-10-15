@@ -9,27 +9,25 @@ double degreeToRadian (const int degreeNumber) {
 
 int main() {
     double x1, x2, dx, epsilon;
-    const int arraySize = (100 / DEGREE_STEPS) + 1;
-    double sinResults[arraySize];
     int iterationNumber = 0;
 
-    printf("Type X1 value: ");
+    printf("Type X1 value (degrees): ");
     scanf("%lf", &x1);
     x1 = degreeToRadian(x1);
-    fflush(stdin);
 
-    printf("Type X2 value: ");
+    printf("Type X2 value (degrees): ");
     scanf("%lf", &x2);
     x2 = degreeToRadian(x2);
-    fflush(stdin);
 
-    printf("Type dx value: ");
+    printf("Type dx value (step size in degrees): ");
     scanf("%lf", &dx);
-    fflush(stdin);
 
-    printf("Type epsilon value: ");
+    printf("Type epsilon value (precision): ");
     scanf("%lf", &epsilon);
-    fflush(stdin);
+
+    int arraySize = (int)((x2 - x1) / degreeToRadian(dx)) + 1;
+    double sinResults[arraySize];
+    double mathSinResults[arraySize];
 
     for (double x = x1; x < x2; x += degreeToRadian(dx)) {
         double sinX = x;
@@ -43,11 +41,15 @@ int main() {
         }
 
         sinResults[iterationNumber] = sinX;
+        mathSinResults[iterationNumber] = sin(x);
         iterationNumber++;
     }
 
+    printf("\nResults:\n");
     for (int i = 0; i < iterationNumber; i++) {
-        printf("sin(%d degrees) = %.6lf\n", i * DEGREE_STEPS, sinResults[i]);
+        double degree = (x1 * 180 / M_PI) + i * dx;
+        printf("Degrees: %.2lf, Taylor Series: %.6lf, Math sin: %.6lf\n",
+               degree, sinResults[i], mathSinResults[i]);
     }
 
     return 0;
