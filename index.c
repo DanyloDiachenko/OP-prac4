@@ -46,10 +46,11 @@ int main() {
     }
 
     printf("\nResults:\n");
+    printf("\t--x--\t\t--sinX--\t--sinX (math)--\t--delta (absolute)--\n");
     for (int i = 0; i < iterationNumber; i++) {
         double degree = (x1 * 180 / M_PI) + i * dx;
-        printf("Degrees: %.2lf, Taylor Series: %.6lf, Math sin: %.6lf\n",
-               degree, sinResults[i], mathSinResults[i]);
+        printf("\t%-8.3lf \t%-10.6lf \t%-14.6lf \t%-14.6lf\n",
+               degree, sinResults[i], mathSinResults[i], fabs(sinResults[i] - mathSinResults[i]));
     }
 
     return 0;
