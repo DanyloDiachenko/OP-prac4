@@ -20,6 +20,7 @@ int main() {
 
             continue;
         }
+        fflush(stdin);
 
         if (x1 < MIN_DEGREES || x1 > MAX_DEGREES) {
             printf("The value must be between %d and %d degrees.\n", MIN_DEGREES, MAX_DEGREES);
@@ -35,6 +36,7 @@ int main() {
 
             continue;
         }
+        fflush(stdin);
 
         if (x2 < MIN_DEGREES || x2 > MAX_DEGREES || x2 <= x1 * 180 / M_PI) {
             printf("The value must be between %d and %d degrees and greater than X1.\n", MIN_DEGREES, MAX_DEGREES);
@@ -50,6 +52,7 @@ int main() {
 
             continue;
         }
+        fflush(stdin);
 
         if (dx <= 0 || dx > MAX_DEGREES) {
             printf("The step size must be greater than 0 and less than or equal to 360.\n");
@@ -58,6 +61,7 @@ int main() {
 
     printf("Type epsilon value (precision): ");
     scanf("%lf", &epsilon);
+    fflush(stdin);
 
     int arraySize = (int)((x2 - x1) / degreeToRadian(dx)) + 1;
     double sinResults[arraySize];
