@@ -2,7 +2,7 @@
 #define FUNCTIONS_H
 
 inline double transformDegreeToRadian (const int degreeNumber) {
-    return (degreeNumber * M_PI / 180);
+    return (degreeNumber * M_PI / 180.0);
 }
 
 inline double truncateNumber(const double value, const int decimalPlaces) {
@@ -15,7 +15,7 @@ inline int getDecimalPlaces(double accuracy) {
     int decimalPlaces = 0;
 
     while (accuracy < 1.0 && decimalPlaces < 15) {
-        accuracy *= 10;
+        accuracy *= 10.0;
         decimalPlaces++;
     }
 
@@ -146,10 +146,10 @@ inline void printResults(
     printf("%-8s %-10s %-18s %-18s %-18s\n", "x", "sinX", "sinX (not trunc)", "sinX (math)", "delta (absolute)");
 
     for (int i = 0; i < iterationNumber; i++) {
-        const double degree = (firstNumber * 180.0 / M_PI) + (double)i * stepNumber;
+        const double degree = (firstNumber * 180.0 / M_PI) + (double) i * stepNumber;
 
         printf("%-8d %-10.*lf %-18.12lf %-18.12lf %-18.12lf\n",
-               (int)degree,
+               (int) degree,
                decimalPlaces,
                truncateNumber(resultArr[i], decimalPlaces),
                truncateNumber(resultArr[i], 12),
@@ -204,7 +204,7 @@ inline void calculateFunction(
 }
 
 inline int getResultArraySize(const double secondNumber, const double firstNumber, const double stepNumber) {
-    return (int)((secondNumber - firstNumber) / transformDegreeToRadian(stepNumber) + 1.0);
+    return (int) ((secondNumber - firstNumber) / transformDegreeToRadian(stepNumber) + 1.0);
 }
 
 #endif // FUNCTIONS_H
