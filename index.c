@@ -1,95 +1,67 @@
-#include <stdio.h>
-#include <math.h>
+#include "./includes.h"
 
-#define MIN_DEGREES 0
-#define MAX_DEGREES 360
-
-double degreeToRadian (const int degreeNumber) {
-    return (degreeNumber * M_PI / 180);
-}
+double transformDegreeToRadian (int degreeNumber);
+int getDecimalPlaces(double accuracy);
+double getAndValidateAccuracy();
+double getAndValidateFirstNumber();
+double getAndValidateSecondNumber(double firstNumber);
+double getAndValidateStepNumber();
+double truncateNumber(double value, int decimalPlaces);
+int getAndValidateFunctionChar();
+void printResults(
+    int iterationNumber,
+    double firstNumber,
+    double stepNumber,
+    int decimalPlaces,
+    const double* resultArr,
+    const double* mathResultArr);
+void calculateFunction(
+    double firstNumber,
+    double secondNumber,
+    double stepNumber,
+    double accuracy,
+    short int sinOrCosInt,
+    int* iterationNumberPointer,
+    double* resultArr,
+    double* mathResultArr);
+int getResultArraySize(double secondNumber, double firstNumber, double stepNumber);
 
 int main() {
-    double x1, x2, dx, epsilon;
     int iterationNumber = 0;
+    int* iterationNumberPointer = &iterationNumber;
 
-    do {
-        printf("Type X1 value (degrees, between %d and %d, less than X2): ", MIN_DEGREES, MAX_DEGREES);
-        if (scanf("%lf", &x1) != 1) {
-            printf("Invalid input. Please enter a valid number.\n");
-            fflush(stdin);
+    const int sinOrCosInt = getAndValidateFunctionChar();
+    const double firstNumber = getAndValidateFirstNumber();
+    const double secondNumber = getAndValidateSecondNumber(firstNumber);
+    const double stepNumber = getAndValidateStepNumber();
+    const double accuracy = getAndValidateAccuracy();
 
-            continue;
-        }
-        fflush(stdin);
+    int arraySize = getResultArraySize(secondNumber, firstNumber, stepNumber);
 
-        if (x1 < MIN_DEGREES || x1 > MAX_DEGREES) {
-            printf("The value must be between %d and %d degrees.\n", MIN_DEGREES, MAX_DEGREES);
-        }
-    } while (x1 < MIN_DEGREES || x1 > MAX_DEGREES);
-    x1 = degreeToRadian(x1);
+    double resultArr[arraySize];
+    double mathResultArr[arraySize];
 
-    do {
-        printf("Type X2 value (degrees, between %d and %d): ", MIN_DEGREES, MAX_DEGREES);
-        if (scanf("%lf", &x2) != 1) {
-            printf("Invalid input. Please enter a valid number.\n");
-            fflush(stdin);
+    calculateFunction(
+         firstNumber,
+         secondNumber,
+         stepNumber,
+         accuracy,
+         sinOrCosInt,
+         iterationNumberPointer,
+         resultArr,
+         mathResultArr
+         );
 
-            continue;
-        }
-        fflush(stdin);
+    const int decimalPlaces = getDecimalPlaces(accuracy);
 
-        if (x2 < MIN_DEGREES || x2 > MAX_DEGREES || x2 <= x1 * 180 / M_PI) {
-            printf("The value must be between %d and %d degrees and greater than X1.\n", MIN_DEGREES, MAX_DEGREES);
-        }
-    } while (x2 < MIN_DEGREES || x2 > MAX_DEGREES || x2 <= x1 * 180 / M_PI);
-    x2 = degreeToRadian(x2);
-
-    do {
-        printf("Type dx value (step size in degrees, between 0 and 360): ");
-        if (scanf("%lf", &dx) != 1) {
-            printf("Invalid input. Please enter a valid number.\n");
-            fflush(stdin);
-
-            continue;
-        }
-        fflush(stdin);
-
-        if (dx <= 0 || dx > MAX_DEGREES) {
-            printf("The step size must be greater than 0 and less than or equal to 360.\n");
-        }
-    } while (dx <= 0 || dx > MAX_DEGREES);
-
-    printf("Type epsilon value (precision): ");
-    scanf("%lf", &epsilon);
-    fflush(stdin);
-
-    int arraySize = (int)((x2 - x1) / degreeToRadian(dx)) + 1;
-    double sinResults[arraySize];
-    double mathSinResults[arraySize];
-
-    for (double x = x1; x < x2; x += degreeToRadian(dx)) {
-        double sinX = x;
-        double delta = sinX;
-        int n = 1;
-
-        while (fabs(delta) >= epsilon) {
-            delta = delta * - (x * x) / ((n + 1.0) * (n + 2.0));
-            sinX = sinX + delta;
-            n = n + 2;
-        }
-
-        sinResults[iterationNumber] = sinX;
-        mathSinResults[iterationNumber] = sin(x);
-        iterationNumber++;
-    }
-
-    printf("\nResults:\n");
-    printf("\t--x--\t\t--sinX--\t--sinX (math)--\t--delta (absolute)--\n");
-    for (int i = 0; i < iterationNumber; i++) {
-        const double degree = (x1 * 180 / M_PI) + i * dx;
-        printf("\t%-8.3lf \t%-10.6lf \t%-14.6lf \t%-14.6lf\n",
-               degree, sinResults[i], mathSinResults[i], fabs(sinResults[i] - mathSinResults[i]));
-    }
+    printResults(
+        *iterationNumberPointer,
+        firstNumber,
+        stepNumber,
+        decimalPlaces,
+        resultArr,
+        mathResultArr
+        );
 
     return 0;
 }
