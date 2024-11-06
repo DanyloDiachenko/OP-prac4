@@ -148,7 +148,7 @@ inline void printResults(
     for (int i = 0; i < iterationNumber; i++) {
         const double degree = (firstNumber * 180.0 / M_PI) + (double) i * stepNumber;
 
-        printf("%-8d %-10.*lf %-18.12lf %-18.12lf %-18.12lf\n",
+        printf("%-8d %-10.*lf %-18.12lf %-18.12lf %-18.e\n",
                (int) degree,
                decimalPlaces,
                truncateNumber(resultArr[i], decimalPlaces),
@@ -168,8 +168,11 @@ inline void calculateFunction(
         int* iterationNumberPointer,
         double* resultArr,
         double* mathResultArr
-        ) {
-    for (double x = firstNumber; x < secondNumber; x += transformDegreeToRadian(stepNumber)) {
+    ) {
+
+    double x = firstNumber;
+
+    do {
         double start;
         double delta;
         int n;
@@ -180,7 +183,7 @@ inline void calculateFunction(
             n = 1;
 
             while (fabs(delta) >= accuracy) {
-                delta = -delta * x * x / (double) ((n + 1) * (n + 2));
+                delta = -delta * x * x / (double)((n + 1) * (n + 2));
                 start += delta;
                 n += 2;
             }
@@ -191,7 +194,7 @@ inline void calculateFunction(
             n = 2;
 
             while (fabs(delta) >= accuracy) {
-                delta = -delta * x * x / (double) ((n - 1) * n);
+                delta = -delta * x * x / (double)((n - 1) * n);
                 start += delta;
                 n += 2;
             }
@@ -200,7 +203,10 @@ inline void calculateFunction(
         resultArr[*iterationNumberPointer] = start;
         mathResultArr[*iterationNumberPointer] = sinOrCosInt == S_LOWERCASE_LETTER ? sin(x) : cos(x);
         (*iterationNumberPointer)++;
-    }
+
+        x += transformDegreeToRadian(stepNumber);
+
+    } while (x <= secondNumber + HARD_EPSILON);
 }
 
 inline int getResultArraySize(const double secondNumber, const double firstNumber, const double stepNumber) {

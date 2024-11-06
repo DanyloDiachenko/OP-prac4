@@ -27,6 +27,8 @@ void calculateFunction(
 int getResultArraySize(double secondNumber, double firstNumber, double stepNumber);
 
 int main() {
+    printf("This program calculates sine or cosine of the giver number range.\n");
+
     int iterationNumber = 0;
     int* iterationNumberPointer = &iterationNumber;
 

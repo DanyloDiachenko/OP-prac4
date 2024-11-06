@@ -9,6 +9,8 @@
 
 #define MIN_STEP 1
 
+#define HARD_EPSILON 1e-9
+
 #define S_LOWERCASE_LETTER 's'
 #define C_LOWERCASE_LETTER 'c'
 
